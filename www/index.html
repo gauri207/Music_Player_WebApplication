@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CDN link for "font awesome" -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div class="main_div">
+        <div class="music_container">
+            <p class="name">GK Music Studio!!</p>
+            <h2 id="title">Tu Hi Haqeeqat</h2>
+            <h4 id="artist">Emran Hashmi</h3>
+                <div class="img_contaner">
+                    <img src="images/thapa-1.jpg" alt="">
+                    <!-- <img src="/images/camera.jpg" alt=""> -->
+                </div>
+
+                <audio src="music/thapa-1.mp3"></audio>
+                <!-- <audio src="/music/thapa-2.mp3"></audio> -->
+
+                <!-- progess bar -->
+                <div class="progressbar_container" id="progress_container">
+                    <div class="progress_duration_meter">
+                        <div id="current_time">0:00</div>
+                        <div id="duration">3.40</div>
+
+                    </div>
+                    <div class="progress_div" id="progress_div">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
+                <!-- controls -->
+                <div class="music_controls">
+                    <i class="fas fa-backward" id="prev" title="Previous"></i>
+                    <!--backward icon inserted from FONT_AWESOME websit" https://fontawesome.com/icons/backward?style=solid -->
+                    <i class="fas fa-play main_button" id="play" title="Play"></i>
+                    <i class="fas fa-forward" id="next" title="Next"></i>
+                </div>
+        </div>
+    </div>
+    <script>
+        const music = document.querySelector("audio");
+        // we select query "img" for rotaing purpose
+        const img = document.querySelector("img");
+        const play = document.getElementById("play");
+        //for chanigng the music dat
+        const artist = document.getElementById("artist");
+        const title = document.getElementById("title");
+        const prev = document.getElementById("prev");
+        const next = document.getElementById("next");
+        //add progress time to time on progress bar
+        let progress = document.getElementById("progress");
+        let total_duration = document.getElementById("duration");
+        let current_time = document.getElementById("current_time");
+        const progress_div = document.getElementById("progress_div");
+
+        const songs = [{
+                name: "thapa-1",
+                title: "Tu Jo Mili",
+                artist: "Emran Hashmi",
+            }, {
+                name: "thapa-2",
+                title: "Naznina",
+                artist: "Altamash Farid",
+            }, {
+                name: "thapa-3",
+                title: "Kehta Hai Pal",
+                artist: "sachin Joshi,Alnkar",
+
+            }, {
+                name: "thapa-4",
+                title: "Kehdoon Tumhe",
+                artist: "Akriti kakr",
+
+            }, {
+                name: "thapa-5",
+                title: "Chura Liya",
+                artist: "Sajan Patel",
+
+            }, {
+                name: "thapa-6",
+                title: "Dhadakan",
+                artist: "Jubin Nautiyal",
+
+            }, {
+                name: "thapa-7",
+                title: "Dil Mang Rha ",
+                artist: "Pashto Vevo",
+
+            }, {
+                name: "thapa-8",
+                title: "Dil Mai Ho Tum",
+                artist: "Arman Malik",
+
+            }, {
+                name: "thapa-9",
+                title: "Dil Mai HO tum",
+                artist: "Arman Malik",
+
+            }, {
+                name: "thapa-10",
+                title: "Mai Hoon Hero",
+                artist: "Unknown",
+            }, {
+                name: "thapa-11",
+                title: "Ik Mulaqaat mai",
+                artist: "Unknown",
+
+            }, {
+                name: "thapa-12",
+                title: "Naino Ki jo Baat",
+                artist: "Unknown",
+
+            }, {
+                name: "thapa-13",
+                title: "Tu Hi Haqeeqat ",
+                artist: "Unknown",
+
+            },
+
+        ];
+        let isPlaying = false;
+        //for playfunctionality
+        // play.addEventListener("click", () => {
+        const playMusic = () => {
+            isPlaying = true;
+            music.play(); /*give play command to play button*/
+            play.classList.replace("fa-play", "fa-pause");
+            // we add class "anime" for rotating img
+            img.classList.add("anime");
+
+        };
+        //for pause functionality
+        // play.addEventListener("click", () => {
+        const pauseMusic = () => {
+            isPlaying = false;
+            music.pause();
+            play.classList.replace("fa-pause", "fa-play");
+            // we add class "anime" for rotating img
+            img.classList.remove("anime");
+
+        };
+        play.addEventListener("click", () => {
+            // if (isPlaying) {
+            //     pauseMusic();
+            // } else {
+            //     playMusic();
+            // }
+
+            //ternary operator
+            isPlaying ? pauseMusic() : playMusic();
+        });
+        //changing the music data
+        const loadSong = (songs) => {
+            title.textContent = songs.title;
+            artist.textContent = songs.artist;
+            music.src = "music/" + songs.name + ".mp3";
+            img.src = "images/" + songs.name + ".jpg";
+        };
+        // loadSong(songs[0]);
+        // const loadSong=(songs)=
+        songIndex = 0; //array  of index starting from [0] index
+        // loadSongs(songs[0]);
+        const nextSong = () => {
+            songIndex = (songIndex + 1) % songs.length;
+            loadSong(songs[songIndex]);
+            playMusic();
+        };
+        const prevSong = () => {
+            songIndex = (songIndex - 1 + songs.length) % songs.length;
+            loadSong(songs[songIndex]);
+            playMusic();
+        };
+
+        //progress JS work
+        music.addEventListener("timeupdate", (event) => {
+            // console.log(event);
+            const {
+                currentTime,
+                duration
+            } = event.srcElement;
+            // console.log(duration);
+            let progress_time = (currentTime / duration) * 100;
+            // console.log(progress_time);
+            progress.style.width = `${progress_time}%`;
+            // always use template literals i.e. `` not single_quotes.this symbol is found on ~ button
+
+
+            //music duration
+
+            let min_duration = Math.floor(duration / 60);
+            let sec_duration = Math.floor(duration % 60);
+
+            let tot_duration = `${min_duration}:${sec_duration}`;
+            // console.log(min_duration);
+            if (duration) {
+                total_duration.textContent = `${tot_duration}`;
+                // console.log(sec_duraton);
+            }
+
+            //current duration update
+            let min_currentTime = Math.floor(currentTime / 60);
+            let sec_currentTime = Math.floor(currentTime % 60);
+
+
+            // console.log(min_currentTime);
+            if (sec_currentTime < 10) {
+                sec_currentTime = `0${sec_currentTime}`;
+            }
+            let tot_currentTime = `${min_currentTime}:${sec_currentTime}`;
+            current_time.textContent = `${tot_currentTime}`;
+            // console.log(sec_duraton);
+
+        });
+        // progress onclick functionality
+        progress_div.addEventListener('click', (event) => {
+            console.log(event);
+            const {
+                duration
+            } = music;
+            let move_progress = (event.offsetX / event.srcElement.clientWidth) * duration;
+            // console.log(duration);
+            // console.log(move_progress);
+
+            music.currentTime = move_progress;
+
+
+        });
+        // if music end. call nextSong function
+        music.addEventListener('ended', nextSong);
+        // add time update music event from belove link
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/timeupdate_event
+        next.addEventListener("click", nextSong);
+        prev.addEventListener("click", prevSong);
+    </script>
+</body>
+
+</html>
